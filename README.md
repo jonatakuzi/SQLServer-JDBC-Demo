@@ -1,62 +1,43 @@
-SQLServer-JDBC-Demo
+# SQLServer-JDBC-Demo
 
-A minimal Java JDBC project that connects to a SQL Server database and demonstrates two core operations: deleting a record and retrieving stored images from the database. The project uses Microsoft’s JDBC driver to establish a connection and execute SQL commands.
+A lightweight Java project demonstrating SQL Server database interaction using JDBC. Covers the full CRUD cycle, binary image storage and retrieval, and reusable connection management via a shared accessor class.
 
- Overview
+## Features
 
-This project shows how to:
+- Reusable `SqlServerDbAccessor` class for consistent DB connection management
+- - **SELECT** — query and print rows using `ResultSet`
+  - - **INSERT** — add new records with `PreparedStatement`
+    - - **UPDATE** — modify existing rows by ID
+      - - **DELETE** — remove specific records by condition
+        - - **Image storage** — store and retrieve `VARBINARY(MAX)` image data as `ImageIcon` via Swing
+         
+          - ## Tech Stack
+         
+          - - Java 17+
+            - - JDBC (Microsoft SQL Server driver `mssql-jdbc`)
+              - - SQL Server (local or remote instance)
+                - - Java Swing (for image display)
+                 
+                  - ## Project Structure
+                 
+                  - ```
+                    SQLServer-JDBC-Demo/
+                    ├── SqlServerDbAccessor.java   # DB connection setup and getConnection()
+                    ├── DeleteTest.java            # DELETE record by ID
+                    ├── RetrieveImageTest.java     # Load VARBINARY image from DB and render it
+                    └── README.md
+                    ```
 
-Connect to a SQL Server instance using a reusable SqlServerDbAccessor class
+                    ## Setup
 
-Execute a DELETE statement on a specific row
-
-Retrieve image data (BLOB) from SQL Server and display it using Swing
-
-Parse results using JDBC’s ResultSet
-
-It serves as a lightweight example of JDBC-based database interaction.
-
- Project Structure
-src/
- ├── SqlServerDbAccessor.java     # Handles DB connection setup
- ├── DeleteTest.java              # Deletes a record by ID
- └── RetrieveTest.java            # Loads and displays an image from the DB
-lib/
- └── mssql-jdbc-6.4.0.jre8.jar    # SQL Server JDBC driver
-
-🧪 Features
-🔹 Database Connection
-
-All DB access is routed through SqlServerDbAccessor, which provides a consistent connection URL and getConnection() method.
-
-🔹 Delete Operation
-
-DeleteTest runs a SQL command such as:
-
-DELETE FROM DL27Login
-WHERE ID = ####;
-
-
-Used to remove a specific record.
-
-Image Retrieval
-
-RetrieveTest reads VARBINARY(MAX) image data from SQL Server, converts it into an ImageIcon, and displays it using:
-
-JOptionPane.showMessageDialog(null, icon);
-
- Running the Project
-
-Add the JDBC driver JAR to your Build Path.
-
-Update credentials/URL inside SqlServerDbAccessor if needed.
-
-Run DeleteTest or RetrieveTest directly from your IDE.
-
- Requirements
-
-Java 8+
-
-SQL Server JDBC driver
-
-A SQL Server table containing IDs and image BLOBs
+                    1. Clone the repo
+                    2. 2. Add the SQL Server JDBC driver (`mssql-jdbc-*.jar`) to your project's classpath
+                       3. 3. Update the connection string in `SqlServerDbAccessor.java` with your server, database, username, and password
+                          4. 4. Run any test class to see the operation in action
+                            
+                             5. ## Key Concepts
+                            
+                             6. - JDBC `Connection`, `Statement`, `PreparedStatement`, and `ResultSet` usage
+                                - - Safe parameterized queries to prevent SQL injection
+                                  - - Binary data (BLOB) round-trip: file to DB column to rendered image
+                                    - - Single-responsibility DB accessor pattern for clean separation of concerns
